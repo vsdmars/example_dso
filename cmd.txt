@@ -1,0 +1,13 @@
+
+clang++ -std=c++17 -fPIC -c singleton.cpp
+clang++ -std=c++17 -shared singleton.o -o libsingleton.so -ltbb
+
+clang++ -std=c++17 -fPIC -c liba.cpp
+clang++ -std=c++17 -fPIC -c libb.cpp
+clang++ -std=c++17 -fPIC -c libno.cpp
+
+clang++ -std=c++17 -shared liba.o -L. -lsingleton -o liba.so -ltbb
+clang++ -std=c++17 -shared libb.o -L. -lsingleton -o libb.so -ltbb
+clang++ -std=c++17 -shared libno.o -L. -lsingleton -o libno.so
+
+clang++ -std=c++17 main.cpp -O3 -ldl
