@@ -1,0 +1,39 @@
+libsingleton.so : singleton shared DSO
+
+liba.so : plugin a, compiled with -lsingleton -ltbb
+libb.so : plugin b, compiled with -lsingleton -ltbb
+libno.so : plugin no, compiled with -lsingleton , while not using cache, no -ltbb needed
+
+a.out : main program
+
+-------
+$ readelf -d liba.so|ag NEEDED
+0x0000000000000001 (NEEDED)             Shared library: [libsingleton.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libtbb.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+
+$ readelf -d libb.so|ag NEEDED
+0x0000000000000001 (NEEDED)             Shared library: [libsingleton.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libtbb.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+$ readelf -d libno.so|ag NEEDED
+0x0000000000000001 (NEEDED)             Shared library: [libsingleton.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+$ readelf -d a.out|ag NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
