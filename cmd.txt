@@ -11,3 +11,6 @@ clang++ -std=c++17 -shared libb.o -L. -lsingleton -o libb.so -ltbb
 clang++ -std=c++17 -shared libno.o -L. -lsingleton -o libno.so
 
 clang++ -std=c++17 main.cpp -O3 -ldl
+
+Run:
+$ LD_LIBRARY_PATH=. ./a.out
